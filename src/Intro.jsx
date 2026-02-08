@@ -39,10 +39,10 @@ function useBeep() {
 }
 
 export default function Intro() {
-  const nav = useNavigate();
+  const navigate = useNavigate();
   const sfx = useBeep();
 
-  // Same hearts stream as proposal page
+  // Floating hearts
   const floatingHearts = useMemo(() => {
     const chars = ["❤", "💗", "💖", "💘", "💞"];
     return Array.from({ length: 18 }).map((_, i) => ({
@@ -58,14 +58,13 @@ export default function Intro() {
     }));
   }, []);
 
-  // Ensures page starts at top on mobile
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const onContinue = () => {
     sfx.tap();
-    nav("#/game"); // route to your App.jsx page
+    navigate("/game"); // ✅ CORRECT for HashRouter
   };
 
   return (
@@ -97,7 +96,9 @@ export default function Intro() {
           <div className="introText">
             For the next <span className="emph">5 minutes</span>, just relax and
             enjoy whatever I built for you.
-            <span className="softLine">No pressure. Just you and me. 🤍</span>
+            <span className="softLine">
+              No pressure. Just you and me. 🤍
+            </span>
           </div>
 
           <button className="pBtn primary" onClick={onContinue}>

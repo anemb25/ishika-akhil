@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { HashRouter, Routes, Route } from "react-router-dom";
 
-import Intro from "./intro.jsx";     // landing / hook screen
-import App from "./App.jsx";         // game
-import Proposal from "./proposal.jsx";
+import Intro from "./Intro.jsx";
+import App from "./App.jsx";
+import Proposal from "./Proposal.jsx";
 
 import "./styles.css";
 import "./proposal.css";
