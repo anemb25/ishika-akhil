@@ -65,7 +65,7 @@ export default function Intro() {
 
   const onContinue = () => {
     sfx.tap();
-    nav("/game"); // route to your App.jsx page
+    nav("#/game"); // route to your App.jsx page
   };
 
   return (
