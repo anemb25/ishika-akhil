@@ -1049,7 +1049,7 @@ export default function App() {
               <button
                 className="btn"
                 onClick={() => {
-                  window.location.href = "/proposal";
+                  window.location.href = "#/proposal";
                 }}
               >
                 ➡ Continue
