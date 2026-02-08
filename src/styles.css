@@ -1,0 +1,1589 @@
+/* RESET */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui, Arial, sans-serif;
+}
+
+/* APP */
+.app {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background: linear-gradient(to bottom, #ffe6ef, #ffd6e5, #ffc6db);
+}
+
+.app.dimmed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 10, 20, 0.10);
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* HUD */
+.hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  height: 56px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: rgba(255,255,255,0.70);
+  backdrop-filter: blur(10px);
+  padding: 0 16px;
+  border-radius: 16px;
+  font-weight: 900;
+
+  z-index: 80;
+}
+
+.hud-right { display: flex; gap: 12px; align-items: center; }
+
+.pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.70);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  font-weight: 900;
+  font-size: 14px;
+}
+.pill.subtle { opacity: 0.85; }
+
+/* Energy bar */
+.energyWrap {
+  min-width: 190px;
+  background: rgba(255,255,255,0.55);
+  border-radius: 14px;
+  padding: 8px 10px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+}
+
+.energyTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.energyLabel {
+  font-weight: 950;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.energyPct {
+  font-weight: 950;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.energyBar {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(80, 60, 80, 0.12);
+  overflow: hidden;
+  outline: 2px solid rgba(255,120,170,0.12);
+}
+
+.energyFill {
+  height: 100%;
+  border-radius: 999px;
+  width: 50%;
+}
+
+.energyBar.ok .energyFill {
+  background: linear-gradient(90deg, rgba(60, 210, 120, 0.95), rgba(30, 170, 90, 0.95));
+}
+
+.energyBar.danger .energyFill {
+  background: linear-gradient(90deg, rgba(255, 80, 110, 0.95), rgba(220, 40, 80, 0.95));
+}
+
+/* STAGE */
+.stage {
+  position: absolute;
+  top: 86px;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  --worldX: 0px;
+}
+
+/* LAYERS */
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: repeat-x;
+}
+
+.layer-sky {
+  background: linear-gradient(to bottom, rgba(255,230,239,0.0), rgba(255,185,215,0.28));
+}
+
+/* Clouds: clearer and more visible */
+.layer-clouds {
+  opacity: 0.82;
+  background-image:
+    radial-gradient(circle at 10% 25%, rgba(255,255,255,0.78) 0 34px, transparent 36px),
+    radial-gradient(circle at 18% 22%, rgba(255,255,255,0.66) 0 46px, transparent 48px),
+    radial-gradient(circle at 30% 28%, rgba(255,255,255,0.72) 0 30px, transparent 32px),
+
+    radial-gradient(circle at 58% 24%, rgba(255,255,255,0.78) 0 38px, transparent 40px),
+    radial-gradient(circle at 68% 22%, rgba(255,255,255,0.66) 0 52px, transparent 54px),
+    radial-gradient(circle at 76% 28%, rgba(255,255,255,0.72) 0 30px, transparent 32px);
+  background-size: 860px 260px;
+  transform: translateX(calc(var(--worldX) * -0.18));
+}
+
+.layer-clouds2 {
+  opacity: 0.55;
+  background-image:
+    radial-gradient(circle at 12% 40%, rgba(210,170,195,0.34) 0 34px, transparent 36px),
+    radial-gradient(circle at 24% 42%, rgba(210,170,195,0.26) 0 50px, transparent 52px),
+    radial-gradient(circle at 34% 44%, rgba(210,170,195,0.30) 0 30px, transparent 32px),
+
+    radial-gradient(circle at 62% 42%, rgba(210,170,195,0.34) 0 34px, transparent 36px),
+    radial-gradient(circle at 76% 44%, rgba(210,170,195,0.26) 0 52px, transparent 54px),
+    radial-gradient(circle at 88% 46%, rgba(210,170,195,0.28) 0 30px, transparent 32px);
+  background-size: 760px 260px;
+  transform: translateX(calc(var(--worldX) * -0.34));
+}
+
+/* Skyline silhouettes: hills + tiny houses + temple-ish peaks */
+.layer-skyline {
+  opacity: 0.62;
+  background-image:
+    radial-gradient(circle at 10% 95%, rgba(120,70,100,0.24) 0 120px, transparent 121px),
+    radial-gradient(circle at 35% 98%, rgba(120,70,100,0.20) 0 160px, transparent 161px),
+    radial-gradient(circle at 70% 96%, rgba(120,70,100,0.22) 0 140px, transparent 141px),
+
+    linear-gradient(rgba(120,70,100,0.22), rgba(120,70,100,0.22)),
+    linear-gradient(rgba(120,70,100,0.18), rgba(120,70,100,0.18)),
+    linear-gradient(rgba(120,70,100,0.20), rgba(120,70,100,0.20)),
+
+    conic-gradient(from 225deg at 18% 86%, rgba(120,70,100,0.18) 0 90deg, transparent 0),
+    conic-gradient(from 225deg at 82% 86%, rgba(120,70,100,0.18) 0 90deg, transparent 0);
+
+  background-size:
+    900px 260px,
+    900px 260px,
+    900px 260px,
+
+    26px 18px,
+    30px 22px,
+    24px 16px,
+
+    900px 260px,
+    900px 260px;
+
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+
+    22% 86%,
+    28% 84%,
+    74% 86%,
+
+    0 0,
+    0 0;
+
+  background-repeat: repeat-x;
+  transform: translateX(calc(var(--worldX) * -0.55));
+}
+
+/* Particles: subtle hearts vibe */
+.particles {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 15% 70%, rgba(255,105,180,0.22) 0 2px, transparent 3px),
+    radial-gradient(circle at 28% 25%, rgba(255,105,180,0.18) 0 3px, transparent 4px),
+    radial-gradient(circle at 70% 18%, rgba(255,105,180,0.16) 0 2px, transparent 3px),
+    radial-gradient(circle at 82% 62%, rgba(255,105,180,0.16) 0 3px, transparent 4px);
+  animation: floaty 6s ease-in-out infinite;
+}
+@keyframes floaty {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Ground */
+.ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 25%;
+  background: linear-gradient(to top, #ff9dbb, #ffc1d6);
+}
+
+/* PLAYER (Ishika) */
+.player {
+  position: absolute;
+  left: 20%;
+  bottom: 25%;
+  width: 140px;
+  height: 190px;
+  transform-origin: bottom center;
+}
+.player.left { transform: scaleX(-1); }
+
+.player.idle { animation: idleBob 1.8s ease-in-out infinite; }
+@keyframes idleBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+
+.player.walking { animation: walkBob 0.35s ease-in-out infinite; }
+@keyframes walkBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-2px);} }
+
+.player.jumping { animation: jumpUp 0.52s ease-in-out; }
+@keyframes jumpUp { 0%{transform:translateY(0);} 45%{transform:translateY(-52px);} 100%{transform:translateY(0);} }
+
+.player .shadow {
+  position: absolute;
+  bottom: -10px;
+  left: 34px;
+  width: 72px;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.12);
+  filter: blur(1px);
+}
+
+.player .head {
+  position: absolute;
+  left: 38px;
+  top: 10px;
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.96);
+  border: 2px solid rgba(255,122,165,0.35);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.player .hair {
+  position: absolute;
+  top: -10px;
+  left: -12px;
+  width: 100px;
+  height: 60px;
+  border-radius: 999px;
+  background: rgba(110, 75, 105, 0.38);
+  transform: rotate(-8deg);
+}
+
+/* Bow */
+.player .bow {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-8deg);
+}
+.player .bow-left, .player .bow-right {
+  width: 10px;
+  height: 10px;
+  border-radius: 50% 50% 50% 0;
+  background: linear-gradient(135deg, #ff9ec5, #ff6fa8);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.player .bow-right { transform: scaleX(-1); }
+.player .bow-center {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff4f96;
+  margin: 0 -2px;
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* Face */
+.player .face { position: absolute; inset: 0; }
+.player .eye {
+  position: absolute;
+  top: 30px;
+  width: 8px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(45, 30, 55, 0.85);
+}
+.player .eye.left { left: 22px; }
+.player .eye.right { right: 22px; }
+.player .blush {
+  position: absolute;
+  top: 42px;
+  width: 12px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 120, 170, 0.35);
+}
+.player .blush.left { left: 10px; }
+.player .blush.right { right: 10px; }
+.player .smile {
+  position: absolute;
+  top: 49px;
+  left: 29px;
+  width: 12px;
+  height: 8px;
+  border: 2px solid rgba(45, 30, 55, 0.55);
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0 0 20px 20px;
+}
+
+/* Torso */
+.player .torso {
+  position: absolute;
+  left: 26px;
+  top: 78px;
+  width: 88px;
+  height: 84px;
+}
+.player .hoodieBody {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: rgba(255, 190, 215, 0.95);
+  border: 2px solid rgba(255,122,165,0.28);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+}
+.player .pocket {
+  position: absolute;
+  left: 18px;
+  top: 44px;
+  width: 52px;
+  height: 26px;
+  border-radius: 16px;
+  background: rgba(255, 210, 230, 0.70);
+  border: 2px solid rgba(255,122,165,0.18);
+}
+.player .arm {
+  position: absolute;
+  top: 22px;
+  width: 16px;
+  height: 46px;
+  border-radius: 999px;
+  background: rgba(255, 185, 210, 0.95);
+  border: 2px solid rgba(255,122,165,0.18);
+  transform-origin: top center;
+}
+.player .arm.left { left: -10px; transform: rotate(10deg); }
+.player .arm.right { right: -10px; transform: rotate(-10deg); }
+
+/* Legs + Shoes */
+.player .legs {
+  position: absolute;
+  left: 44px;
+  top: 160px;
+  width: 56px;
+  height: 28px;
+}
+.player .leg {
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(255, 175, 205, 0.95);
+  transform-origin: top center;
+}
+.player.walking .leg { animation: legSwing 0.32s ease-in-out infinite; }
+.player.walking .leg.right { animation-delay: 0.16s; }
+@keyframes legSwing { 0%,100%{transform:rotate(12deg);} 50%{transform:rotate(-14deg);} }
+.player .leg.left { left: 10px; }
+.player .leg.right { right: 10px; }
+.player .shoe {
+  position: absolute;
+  top: 14px;
+  width: 18px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.88);
+  border: 2px solid rgba(255,122,165,0.18);
+}
+.player .shoe.left { left: 4px; }
+.player .shoe.right { right: 4px; }
+
+/* AKHIL (simple sprite) */
+.akhilWrap {
+  position: absolute;
+  left: 52%;
+  bottom: 34%; /* pushed up more */
+  transform: translateX(-50%);
+  z-index: 45;
+  pointer-events: none;
+  animation: akhilPop 0.45s ease-out;
+}
+
+@keyframes akhilPop {
+  0% { transform: translateX(-50%) translateY(10px) scale(0.96); opacity: 0; }
+  100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+}
+
+.akhilSprite {
+  width: 150px;
+  height: 200px;
+  position: relative;
+  transform-origin: bottom center;
+  animation: idleBob 1.6s ease-in-out infinite;
+}
+
+.akhilSprite .shadow {
+  position: absolute;
+  bottom: -10px;
+  left: 40px;
+  width: 72px;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.12);
+  filter: blur(1px);
+}
+
+/* head */
+.akhilSprite .head {
+  position: absolute;
+  left: 42px;
+  top: 12px;
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.96);
+  border: 2px solid rgba(80, 120, 210, 0.18);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.akhilSprite .hair {
+  position: absolute;
+  top: -10px;
+  left: -12px;
+  width: 100px;
+  height: 62px;
+  border-radius: 999px;
+  background: rgba(55, 60, 90, 0.36);
+  transform: rotate(6deg);
+}
+
+.akhilSprite .face { position: absolute; inset: 0; }
+.akhilSprite .eye {
+  position: absolute;
+  top: 31px;
+  width: 8px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(45, 30, 55, 0.85);
+}
+.akhilSprite .eye.left { left: 22px; }
+.akhilSprite .eye.right { right: 22px; }
+.akhilSprite .smile {
+  position: absolute;
+  top: 50px;
+  left: 28px;
+  width: 14px;
+  height: 8px;
+  border: 2px solid rgba(45, 30, 55, 0.55);
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0 0 20px 20px;
+}
+
+/* torso + arms */
+.akhilSprite .torso {
+  position: absolute;
+  left: 30px;
+  top: 82px;
+  width: 90px;
+  height: 86px;
+}
+
+.akhilSprite .hoodieBody {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: rgba(120, 170, 255, 0.78); /* BLUE BODY */
+  border: 2px solid rgba(80, 120, 210, 0.22);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+}
+
+.akhilSprite .pocket {
+  position: absolute;
+  left: 18px;
+  top: 46px;
+  width: 54px;
+  height: 26px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.30);
+  border: 2px solid rgba(80, 120, 210, 0.16);
+}
+
+.akhilSprite .arm {
+  position: absolute;
+  top: 22px;
+  width: 16px;
+  height: 46px;
+  border-radius: 999px;
+  background: rgba(160, 200, 255, 0.70);
+  border: 2px solid rgba(80, 120, 210, 0.14);
+}
+.akhilSprite .arm.left { left: -10px; transform: rotate(10deg); }
+.akhilSprite .arm.right { right: -10px; transform: rotate(-10deg); }
+
+/* legs */
+.akhilSprite .legs {
+  position: absolute;
+  left: 50px;
+  top: 166px;
+  width: 56px;
+  height: 28px;
+}
+.akhilSprite .leg {
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(160, 200, 255, 0.72);
+}
+.akhilSprite .leg.left { left: 10px; }
+.akhilSprite .leg.right { right: 10px; }
+.akhilSprite .shoe {
+  position: absolute;
+  top: 14px;
+  width: 18px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.88);
+  border: 2px solid rgba(80, 120, 210, 0.14);
+}
+.akhilSprite .shoe.left { left: 4px; }
+.akhilSprite .shoe.right { right: 4px; }
+
+/* CONTROLS */
+.controls {
+  position: absolute;
+  bottom: 16px;
+  left: 12px;
+  right: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 12px;
+  z-index: 90;
+}
+
+.ctrl {
+  height: 60px;
+  border: none;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(10px);
+  font-size: 20px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+}
+.ctrl.jump { font-size: 16px; }
+.ctrl:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* DIALOG OVERLAY (over Akhil) */
+.dialogOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 100;
+}
+
+.dialogBox {
+  width: min(620px, calc(100vw - 24px));
+  border-radius: 22px;
+  background: rgba(255,255,255,0.86);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.18);
+  padding: 16px 16px 14px;
+  outline: 2px solid rgba(255,120,170,0.18);
+
+  /* moved a bit LOWER than before */
+    transform: translateY(12vh);
+
+}
+
+.dialogHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.speaker {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 950;
+  font-size: 13px;
+}
+.speaker.cpu { background: rgba(160, 150, 220, 0.25); }
+
+.hint { font-weight: 900; font-size: 12px; opacity: 0.75; }
+
+.dialogText {
+  min-height: 64px;
+  font-weight: 950;
+  font-size: 16px;
+  line-height: 1.3;
+  color: rgba(40, 20, 40, 0.92);
+  padding: 8px 4px 14px;
+}
+
+.dialogActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn {
+  border: none;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-weight: 950;
+  cursor: pointer;
+  background: rgba(255,255,255,0.75);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+}
+.btn.primary { background: rgba(255, 160, 205, 0.55); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Food rain */
+.foodRain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 70;
+}
+.foodDrop {
+  position: absolute;
+  top: -10%;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.10));
+}
+@keyframes fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(160deg); opacity: 0.0; }
+}
+
+/* =====================================================
+   PHASE 2–FINAL SCENE ADDITIONS (Screens 2 → End)
+   Append Only — Do Not Modify Above Code
+===================================================== */
+
+/* ---------- SCENE BACKGROUNDS ---------- */
+
+/* Screen 2: Sunny / Day */
+.scene-sunny {
+  background: linear-gradient(to bottom, #fff1c9, #ffd8a8, #ffc6a0);
+}
+
+/* Screen 3: Fire / Anger */
+.scene-fire {
+  background: linear-gradient(to bottom, #ff5a3c, #ff2e2e, #b30000);
+  filter: saturate(1.4);
+}
+
+/* Screen 3: Water / Calm */
+.scene-water {
+  background: linear-gradient(to bottom, #bfe9ff, #7fd3ff, #4fb3e8);
+}
+
+/* Screen 4: Night / Rest */
+.scene-night {
+  background: linear-gradient(to bottom, #0d1033, #181b55, #2a2f80);
+}
+
+/* Dream / Soft Mode */
+.scene-dream {
+  background: linear-gradient(to bottom, #ffd6f5, #eecbff, #cbbdff);
+}
+
+/* ---------- FOREGROUND OBJECTS ---------- */
+
+/* Houses + Trees */
+.layer-foreground {
+  background-image:
+    linear-gradient(#7a4c4c, #7a4c4c),
+    linear-gradient(#3d7a3d, #3d7a3d);
+  background-size:
+    60px 40px,
+    40px 80px;
+  background-position:
+    20% 90%,
+    70% 85%;
+  background-repeat: repeat-x;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ---------- NIGHT STARS ---------- */
+
+.layer-stars {
+  background-image:
+    radial-gradient(white 1px, transparent 2px);
+  background-size: 40px 40px;
+  opacity: 0.6;
+  animation: starTwinkle 4s infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes starTwinkle {
+  from { opacity: 0.3; }
+  to { opacity: 0.7; }
+}
+
+/* ---------- FIRE PARTICLES ---------- */
+
+.layer-fire {
+  background-image:
+    radial-gradient(circle, rgba(255,120,0,0.6) 0 4px, transparent 5px);
+  background-size: 40px 40px;
+  animation: fireMove 1s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes fireMove {
+  from { background-position-y: 0; }
+  to { background-position-y: -40px; }
+}
+
+/* ---------- WATER PARTICLES ---------- */
+
+.layer-water {
+  background-image:
+    radial-gradient(circle, rgba(120,200,255,0.5) 0 3px, transparent 4px);
+  background-size: 30px 30px;
+  animation: waterFlow 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes waterFlow {
+  from { background-position-x: 0; }
+  to { background-position-x: 60px; }
+}
+
+/* ---------- HUG ANIMATION ---------- */
+
+.player.hugging,
+.akhilSprite.hugging {
+  animation: hugMove 1s ease-in-out infinite;
+}
+
+@keyframes hugMove {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05) translateX(4px); }
+  100% { transform: scale(1); }
+}
+
+/* Floating hearts during hug */
+.hugHearts {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(pink 2px, transparent 3px);
+  background-size: 30px 30px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ---------- SLEEP MODE ---------- */
+
+.player.sleeping {
+  transform: rotate(2deg);
+  opacity: 0.9;
+}
+
+/* ZZZ effect */
+.zzz {
+  position: absolute;
+  top: -40px;
+  right: 10px;
+  font-size: 20px;
+  animation: floatZZZ 2s infinite;
+  color: rgba(255,255,255,0.7);
+  pointer-events: none;
+}
+
+@keyframes floatZZZ {
+  0% { transform: translateY(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-30px); opacity: 0; }
+}
+
+/* ---------- EMOTION STATES ---------- */
+
+.player.angry .eye {
+  transform: rotate(-20deg);
+}
+
+.player.angry .smile {
+  border-radius: 0;
+}
+
+.player.sad .smile {
+  opacity: 0.4;
+}
+
+.player.soft .smile {
+  transform: scale(1.2);
+}
+
+/* ---------- SCENE TRANSITION ---------- */
+
+.sceneFade {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.15);
+  animation: fadeInOut 1s ease;
+  pointer-events: none;
+  z-index: 200;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---------- LONG DIALOG SUPPORT ---------- */
+
+.dialogText.long {
+  min-height: 110px;
+  line-height: 1.5;
+  font-size: 17px;
+}
+/* Smooth scene transitions */
+.stage {
+  transition: background 1200ms ease-in-out, filter 1200ms ease-in-out;
+}
+
+/* Optional: if you apply scene class on .app instead of .stage */
+.app {
+  transition: background 1200ms ease-in-out, filter 1200ms ease-in-out;
+}
+
+/* Hug positioning */
+.player.hugging {
+  transform: translateX(12px);
+}
+
+.akhilSprite.hugging {
+  transform: translateX(-12px);
+}
+
+/* Local hearts (not full screen) */
+.hugCluster {
+  position: absolute;
+  bottom: 40%;
+  left: 28%;
+  font-size: 22px;
+  animation: floatHearts 1.8s ease-in-out infinite;
+  z-index: 60;
+}
+
+@keyframes floatHearts {
+  0% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(-8px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 0.7; }
+}
+
+/* Tiny hug text */
+.hugText {
+  position: absolute;
+  bottom: 36%;
+  left: 29%;
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(255, 120, 170, 0.85);
+  letter-spacing: 0.5px;
+  animation: fadeInOut 2.5s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* =========================
+   SCREEN 4: DUSK → NIGHT + SLEEP SCENE
+   APPEND THIS AT END OF styles.css
+   ========================= */
+
+/* 1) Smooth scene fade overlay (prevents sudden jumps) */
+.sceneFade {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1200ms ease;
+  background: radial-gradient(circle at 50% 35%, rgba(255,255,255,0.08), rgba(0,0,0,0.30));
+}
+.sceneFade.on { opacity: 1; }
+
+/* 2) SCENE THEMES (sky + ground controlled by scene class on .stage) */
+
+/* DUSK: purple-pink-blue calm */
+.stage.scene-dusk .layer-sky {
+  background: linear-gradient(
+    to bottom,
+    rgba(120, 80, 160, 0.40),
+    rgba(170, 110, 170, 0.22),
+    rgba(255, 185, 215, 0.10)
+  );
+}
+
+.stage.scene-dusk .layer-clouds { opacity: 0.55; }
+.stage.scene-dusk .layer-clouds2 { opacity: 0.35; }
+
+.stage.scene-dusk .ground {
+  background: linear-gradient(to top, #c88aa7, #e8b3c8);
+}
+
+/* NIGHT: not pitch black, soft deep */
+.stage.scene-night .layer-sky {
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 24, 60, 0.92),
+    rgba(40, 38, 90, 0.78),
+    rgba(70, 55, 110, 0.55)
+  );
+}
+
+.stage.scene-night .layer-clouds,
+.stage.scene-night .layer-clouds2 { opacity: 0.18; }
+
+.stage.scene-night .layer-skyline { opacity: 0.45; }
+
+.stage.scene-night .ground {
+  background: linear-gradient(to top, #2a2440, #50406a);
+}
+
+/* Night stars */
+.layer-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1600ms ease;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.75) 0 1px, transparent 2px),
+    radial-gradient(circle at 30% 40%, rgba(255,255,255,0.55) 0 1px, transparent 2px),
+    radial-gradient(circle at 62% 18%, rgba(255,255,255,0.65) 0 1px, transparent 2px),
+    radial-gradient(circle at 78% 33%, rgba(255,255,255,0.70) 0 1px, transparent 2px),
+    radial-gradient(circle at 85% 72%, rgba(255,255,255,0.55) 0 1px, transparent 2px),
+    radial-gradient(circle at 40% 75%, rgba(255,255,255,0.45) 0 1px, transparent 2px);
+  background-size: 900px 480px;
+  mix-blend-mode: screen;
+}
+.stage.scene-night .layer-stars { opacity: 1; }
+
+/* Soft “breathing darker” pulse (towards end of screen 4) */
+.nightPulse {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 55;
+  opacity: 0;
+}
+.nightPulse.on {
+  opacity: 1;
+  animation: nightBreath 3.6s ease-in-out infinite;
+}
+@keyframes nightBreath {
+  0%, 100% { background: rgba(0,0,0,0.05); }
+  50% { background: rgba(0,0,0,0.18); }
+}
+
+/* 3) Bedroom / Bed layer (replaces “pink ground vibe” during sleep) */
+.sleepScene {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  z-index: 35;
+  pointer-events: none;
+}
+
+/* Bedroom floor */
+.sleepFloor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60%;
+  background: linear-gradient(to top, rgba(30, 28, 50, 0.85), rgba(55, 45, 80, 0.45));
+}
+
+/* Bed container */
+.bed {
+  position: absolute;
+  left: 8%;
+  bottom: 10%;
+  width: 320px;
+  height: 170px;
+  border-radius: 26px;
+  background: rgba(255,255,255,0.10);
+  box-shadow: 0 40px 120px rgba(0,0,0,0.35);
+  outline: 2px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+}
+
+/* Headboard */
+.bedHead {
+  position: absolute;
+  left: 6%;
+  bottom: 54%;
+  width: 60%;
+  height: 46%;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.10);
+  outline: 2px solid rgba(255,255,255,0.07);
+}
+
+/* Mattress */
+.bedMattress {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 10%;
+  height: 60%;
+  border-radius: 22px;
+  background: linear-gradient(to top, rgba(255,220,235,0.22), rgba(255,255,255,0.06));
+  outline: 2px solid rgba(255,255,255,0.06);
+}
+
+/* Blanket */
+.bedBlanket {
+  position: absolute;
+  left: 10%;
+  right: 8%;
+  bottom: 14%;
+  height: 46%;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(170,140,220,0.35), rgba(255,160,205,0.18));
+  outline: 2px solid rgba(255,255,255,0.06);
+  box-shadow: inset 0 12px 40px rgba(0,0,0,0.18);
+}
+
+/* Pillow */
+.bedPillow {
+  position: absolute;
+  left: 14%;
+  bottom: 52%;
+  width: 90px;
+  height: 44px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.20);
+  outline: 2px solid rgba(255,255,255,0.07);
+}
+
+/* Ishika sleeping “mini sprite” on bed */
+.sleepIshika {
+  position: absolute;
+  left: 22%;
+  bottom: 32%;
+  width: 130px;
+  height: 70px;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.10);
+  outline: 2px solid rgba(255,255,255,0.06);
+  transform: rotate(-4deg);
+}
+
+.sleepIshikaFace {
+  position: absolute;
+  left: 18px;
+  top: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  outline: 2px solid rgba(255,120,170,0.18);
+}
+.sleepEye {
+  position: absolute;
+  top: 19px;
+  width: 10px;
+  height: 6px;
+  border-radius: 999px;
+  border-bottom: 2px solid rgba(45, 30, 55, 0.60);
+}
+.sleepEye.left { left: 10px; }
+.sleepEye.right { right: 10px; }
+
+.sleepBlush {
+  position: absolute;
+  left: 10px;
+  top: 28px;
+  width: 24px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 120, 170, 0.25);
+  filter: blur(0.2px);
+}
+
+/* ZZZ anchored near bed */
+.zzz {
+  position: absolute;
+  left: 28%;
+  bottom: 72%;
+  font-weight: 950;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.75);
+  text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  font-size: 14px;
+  opacity: 0.85;
+  animation: zzzFloat 2.6s ease-in-out infinite;
+}
+@keyframes zzzFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.65; }
+  50% { transform: translateY(-10px); opacity: 0.95; }
+}
+
+/* 4) Explosion (cartoony) */
+.headExplode {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+}
+.headExplode.on { opacity: 1; }
+
+.boom {
+  font-size: 64px;
+  transform: scale(0.85);
+  animation: boomPop 650ms ease-out forwards;
+  filter: drop-shadow(0 20px 60px rgba(0,0,0,0.35));
+}
+@keyframes boomPop {
+  0% { transform: scale(0.6) rotate(-8deg); opacity: 0; }
+  55% { transform: scale(1.05) rotate(6deg); opacity: 1; }
+  100% { transform: scale(0.95) rotate(0deg); opacity: 1; }
+}
+
+/* 5) Game over overlay */
+.endOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 8, 20, 0.55);
+  backdrop-filter: blur(8px);
+}
+
+.endCard {
+  width: min(720px, calc(100vw - 24px));
+  border-radius: 26px;
+  padding: 22px;
+  background: rgba(255,255,255,0.10);
+  outline: 2px solid rgba(255,255,255,0.12);
+  box-shadow: 0 40px 140px rgba(0,0,0,0.35);
+  text-align: center;
+  color: rgba(255,255,255,0.92);
+}
+
+.endTitle {
+  font-size: 36px;
+  font-weight: 1000;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.endSub {
+  font-size: 14px;
+  font-weight: 900;
+  opacity: 0.85;
+  margin-bottom: 18px;
+}
+
+.endBtns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.endBtn {
+  border: none;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-weight: 1000;
+  cursor: pointer;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.20);
+  min-width: 160px;
+  font-size: 16px;
+}
+.endBtn.primary {
+  background: rgba(255, 160, 205, 0.85);
+}
+/* ---------------------------
+   FOOD RAIN: softer + slower
+   Replace your existing @keyframes fall with this
+----------------------------*/
+@keyframes fall {
+  0% { transform: translateY(-18vh) rotate(0deg); opacity: 0.0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(112vh) rotate(120deg); opacity: 0.0; }
+}
+
+/* ---------------------------
+   SCREEN 4 SCENES: dusk/night
+----------------------------*/
+.stage.scene-dusk .layer-sky {
+  background: linear-gradient(to bottom, rgba(255,180,210,0.18), rgba(90,85,150,0.38), rgba(60,55,120,0.55));
+}
+
+.stage.scene-night .layer-sky {
+  background: linear-gradient(to bottom, rgba(70,60,130,0.55), rgba(35,30,85,0.72), rgba(20,18,55,0.86));
+}
+
+.stage.scene-night .layer-clouds,
+.stage.scene-night .layer-clouds2 {
+  opacity: 0.25;
+}
+
+.stage.scene-night .particles {
+  opacity: 0.10;
+}
+
+/* stars appear in night via extra layer look */
+.stage.scene-night::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  background-image:
+    radial-gradient(circle at 12% 22%, rgba(255,255,255,0.55) 0 1px, transparent 2px),
+    radial-gradient(circle at 34% 18%, rgba(255,255,255,0.40) 0 1px, transparent 2px),
+    radial-gradient(circle at 60% 26%, rgba(255,255,255,0.50) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 14%, rgba(255,255,255,0.35) 0 1px, transparent 2px),
+    radial-gradient(circle at 88% 30%, rgba(255,255,255,0.42) 0 1px, transparent 2px);
+  opacity: 0.9;
+}
+
+/* Ground transforms with night */
+.stage.scene-night .ground {
+  background: linear-gradient(to top, rgba(55,35,85,0.88), rgba(95,55,130,0.65));
+}
+
+/* subtle breathing pulse darker while night */
+.stage.scene-night {
+  animation: nightPulse 5s ease-in-out infinite;
+}
+@keyframes nightPulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(0.92); }
+}
+
+/* ---------------------------
+   BEDROOM OVERLAY (screen4)
+----------------------------*/
+.bedroomLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* a simple room base */
+.bedroomLayer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  background: linear-gradient(to top, rgba(40,28,70,0.35), rgba(255,255,255,0.0));
+}
+
+/* bed + pillow + headboard (cleaner, not pink-heavy) */
+.bedroomLayer::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  bottom: 7%;
+  width: 38%;
+  height: 26%;
+  border-radius: 22px;
+  background:
+    linear-gradient(to bottom, rgba(255,255,255,0.20), rgba(255,255,255,0.04)),
+    linear-gradient(to top, rgba(90,60,140,0.55), rgba(140,95,180,0.38));
+  box-shadow: 0 26px 60px rgba(0,0,0,0.22);
+  outline: 2px solid rgba(255,255,255,0.10);
+}
+
+/* ---------------------------
+   ISHIKA SLEEPING POSE + ZZZ
+----------------------------*/
+.player.sleeping {
+  bottom: 10%;
+  left: 16%;
+  transform: rotate(-2deg) scale(1.02);
+  animation: sleepBob 2.6s ease-in-out infinite;
+}
+
+@keyframes sleepBob {
+  0%,100% { transform: rotate(-2deg) translateY(0) scale(1.02); }
+  50% { transform: rotate(-2deg) translateY(-4px) scale(1.02); }
+}
+
+/* soften face when sleeping */
+.player.sleeping .smile {
+  opacity: 0.55;
+}
+.player.sleeping .eye {
+  height: 3px;
+  border-radius: 999px;
+  opacity: 0.55;
+}
+
+/* ZZZ near bed (not top of screen) */
+.zzzNear {
+  position: absolute;
+  left: 105px;
+  top: 10px;
+  font-weight: 950;
+  font-size: 14px;
+  opacity: 0.75;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.82);
+  text-shadow: 0 10px 26px rgba(0,0,0,0.25);
+  animation: zzzFloat 2.0s ease-in-out infinite;
+}
+
+@keyframes zzzFloat {
+  0%,100% { transform: translateY(0); opacity: 0.65; }
+  50% { transform: translateY(-10px); opacity: 0.95; }
+}
+
+/* ---------------------------
+   AKHIL EXPLOSION (cute)
+----------------------------*/
+.akhilWrap.explodeGrow {
+  transform: translateX(-50%) translateY(0) scale(1.0);
+}
+
+.akhilSprite.explode {
+  animation: growThenPop 1.7s ease-in-out forwards;
+}
+
+@keyframes growThenPop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.35); }
+  70% { transform: scale(1.55) rotate(2deg); }
+  100% { transform: scale(0.01); opacity: 0; }
+}
+
+.boomFx {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%);
+  font-size: 42px;
+  filter: drop-shadow(0 18px 26px rgba(0,0,0,0.25));
+  animation: boom 1.2s ease-out forwards;
+}
+
+@keyframes boom {
+  0% { transform: translateX(-50%) scale(0.7); opacity: 0.0; }
+  25% { opacity: 1; }
+  100% { transform: translateX(-50%) scale(1.35); opacity: 0; }
+}
+
+/* ---------------------------
+   GAME OVER OVERLAY
+----------------------------*/
+.gameOverDim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 10, 25, 0.35);
+  z-index: 120;
+}
+
+.gameOverOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 140;
+  display: grid;
+  place-items: start center;
+  padding-top: 70px;
+  pointer-events: auto;
+}
+
+.gameOverCard {
+  width: min(640px, calc(100vw - 24px));
+  border-radius: 22px;
+  background: rgba(255,255,255,0.86);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.25);
+  padding: 18px 16px 16px;
+  outline: 2px solid rgba(255, 120, 170, 0.20);
+  text-align: center;
+  transform: translateY(20vh);
+}
+
+.gameOverTitle {
+  font-weight: 1000;
+  font-size: 28px;
+  color: rgba(40, 20, 40, 0.92);
+}
+
+.gameOverSub {
+  margin-top: 4px;
+  font-weight: 900;
+  opacity: 0.75;
+}
+
+.gameOverBtns {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+/* Hug text stays local */
+.hugText {
+  position: absolute;
+  left: 30%;
+  bottom: 36%;
+  z-index: 60;
+  font-weight: 950;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.76);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+  opacity: 0.95;
+}
+/* =========================
+   INTRO / START PAGE
+   ========================= */
+
+/* Full-page locked dreamy background (same vibe as proposal) */
+.introRoot {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 190, 220, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 30%, rgba(160, 200, 255, 0.28), transparent 60%),
+    linear-gradient(135deg, rgba(255, 220, 236, 0.55), rgba(186, 210, 255, 0.55));
+}
+
+/* Soft overlay texture */
+.introRoot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.18), transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.12), transparent 50%);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* Use your existing heartsStream + floatHeart + keyframes (same class names) */
+/* If already present, do NOT duplicate.
+   If not present, you can copy from proposal CSS:
+   .heartsStream, .floatHeart, @keyframes floatUp
+*/
+
+/* Stage center */
+.introStage {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+/* Card */
+.introCard {
+  width: min(860px, 92vw);
+  border-radius: 28px;
+  padding: 22px;
+  background: rgba(255,255,255,0.40);
+  backdrop-filter: blur(14px);
+  outline: 1px solid rgba(255,255,255,0.55);
+  box-shadow: 0 40px 120px rgba(0,0,0,0.18);
+  text-align: center;
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+
+.introTitle {
+  font-size: clamp(26px, 4vw, 44px);
+  font-weight: 1100;
+  color: rgba(40, 18, 40, 0.88);
+  letter-spacing: 0.2px;
+}
+
+.introText {
+  font-size: clamp(16px, 2.2vw, 20px);
+  font-weight: 800;
+  color: rgba(45, 18, 40, 0.86);
+  line-height: 1.55;
+  max-width: 60ch;
+}
+
+.introText .emph {
+  font-weight: 1100;
+  color: rgba(160, 70, 120, 0.92);
+}
+
+.softLine {
+  display: block;
+  margin-top: 10px;
+  font-weight: 900;
+  opacity: 0.9;
+}
+
+.introHint {
+  margin-top: 2px;
+  font-weight: 850;
+  font-size: 13px;
+  opacity: 0.72;
+  color: rgba(45, 18, 40, 0.74);
+}

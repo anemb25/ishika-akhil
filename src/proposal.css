@@ -1,0 +1,475 @@
+/* Full-page locked dreamy background */
+.proposalRoot {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 190, 220, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 30%, rgba(160, 200, 255, 0.28), transparent 60%),
+    linear-gradient(135deg, rgba(255, 220, 236, 0.55), rgba(186, 210, 255, 0.55));
+}
+
+/* Soft overlay texture */
+.proposalRoot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.18), transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.12), transparent 50%);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* Stage container */
+.proposalStage {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+/* Floating hearts */
+.heartsStream {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.floatHeart {
+  position: absolute;
+  bottom: -30px;
+  animation: floatUp linear infinite;
+  transform: translateX(0);
+  text-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+@keyframes floatUp {
+  0% { transform: translateX(0) translateY(0); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: translateX(var(--drift)) translateY(-120vh); opacity: 0; }
+}
+
+/* Toast message */
+.toast {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.62);
+  backdrop-filter: blur(10px);
+  outline: 1px solid rgba(255,255,255,0.65);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.16);
+  font-weight: 800;
+  color: rgba(50, 20, 45, 0.86);
+}
+
+/* Common button style */
+.pBtn {
+  border: none;
+  border-radius: 18px;
+  padding: 14px 18px;
+  font-weight: 950;
+  cursor: pointer;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.18);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.pBtn:hover { transform: translateY(-1px); }
+.pBtn:active { transform: translateY(1px); box-shadow: 0 10px 26px rgba(0,0,0,0.18); }
+
+.pBtn.primary {
+  background: rgba(255, 160, 205, 0.90);
+}
+
+/* Transition screen */
+.centerStack {
+  width: min(820px, 92vw);
+  text-align: center;
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  padding: 20px;
+}
+
+.bigLine {
+  font-size: clamp(22px, 3.2vw, 34px);
+  font-weight: 1000;
+  color: rgba(40, 18, 40, 0.86);
+  text-shadow: 0 18px 50px rgba(255,255,255,0.35);
+}
+
+.fadeIn1 { opacity: 0; animation: fadeIn 700ms ease forwards; }
+.fadeIn2 { opacity: 0; animation: fadeIn 700ms ease forwards; animation-delay: 380ms; }
+.fadeIn3 { opacity: 0; animation: fadeIn 700ms ease forwards; animation-delay: 760ms; }
+@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+/* Letter screen */
+.letterWrap {
+  width: min(920px, 92vw);
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+
+.letterCard {
+  width: 100%;
+  border-radius: 26px;
+  padding: 18px;
+  background: rgba(255,255,255,0.40);
+  backdrop-filter: blur(14px);
+  outline: 1px solid rgba(255,255,255,0.55);
+  box-shadow: 0 40px 120px rgba(0,0,0,0.18);
+}
+
+.letterTitle {
+  font-size: 22px;
+  font-weight: 1000;
+  color: rgba(45, 18, 40, 0.88);
+  margin-bottom: 10px;
+}
+
+.letterBody {
+  max-height: min(56vh, 520px);
+  overflow: auto;
+  padding-right: 6px;
+  color: rgba(45, 18, 40, 0.86);
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.letterBody p {
+  margin: 0 0 10px;
+}
+
+.letterEnd {
+  margin-top: 12px;
+  font-weight: 1000;
+}
+
+.letterSign {
+  margin-top: 18px;
+  text-align: right;
+  font-weight: 1000;
+  opacity: 0.9;
+}
+
+/* Propose screen */
+.proposeWrap {
+  width: min(920px, 92vw);
+  text-align: center;
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  padding: 18px;
+}
+
+.proposeTitle {
+  font-size: clamp(26px, 3.8vw, 44px);
+  font-weight: 1100;
+  color: rgba(40, 18, 40, 0.88);
+}
+
+.proposeBtns {
+  position: relative;
+  width: min(860px, 92vw);
+  height: min(60vh, 520px);
+  border-radius: 26px;
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(12px);
+  outline: 1px solid rgba(255,255,255,0.42);
+  box-shadow: 0 30px 100px rgba(0,0,0,0.14);
+  display: grid;
+  place-items: center;
+}
+
+.proposeBtns .pBtn {
+  min-width: 170px;
+  font-size: 18px;
+}
+
+.tinyHint {
+  font-weight: 850;
+  opacity: 0.75;
+  color: rgba(45, 18, 40, 0.74);
+}
+
+/* Terms */
+.termsWrap {
+  width: min(920px, 92vw);
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  text-align: center;
+  padding: 18px;
+}
+
+.termsTitle {
+  font-size: 22px;
+  font-weight: 1000;
+  color: rgba(45, 18, 40, 0.88);
+}
+
+.termsSub {
+  font-size: 14px;
+  font-weight: 900;
+  opacity: 0.8;
+  color: rgba(45, 18, 40, 0.78);
+}
+
+.termsCard {
+  width: 100%;
+  border-radius: 26px;
+  padding: 14px;
+  background: rgba(255,255,255,0.34);
+  backdrop-filter: blur(14px);
+  outline: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 40px 120px rgba(0,0,0,0.14);
+  text-align: left;
+}
+
+.termItem {
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.45);
+  margin-bottom: 10px;
+  font-weight: 900;
+  color: rgba(45, 18, 40, 0.82);
+}
+
+/* Signature */
+.signWrap {
+  width: min(920px, 92vw);
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  text-align: center;
+  padding: 18px;
+}
+
+.signTitle {
+  font-size: 24px;
+  font-weight: 1100;
+  color: rgba(45, 18, 40, 0.88);
+}
+
+.signInput {
+  width: min(420px, 92vw);
+  border: none;
+  border-radius: 16px;
+  padding: 14px 14px;
+  font-weight: 900;
+  font-size: 16px;
+  outline: 1px solid rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.78);
+}
+
+.signReveal {
+  margin-top: 8px;
+  font-weight: 1000;
+  color: rgba(45, 18, 40, 0.86);
+}
+
+.sigRow {
+  display: flex;
+  gap: 18px;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.sigName {
+  font-family: "cursive";
+  font-size: 34px;
+  font-weight: 900;
+  color: rgba(45, 18, 40, 0.88);
+}
+
+.akhilSig {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: sigIn 900ms ease forwards;
+  animation-delay: 250ms;
+}
+
+@keyframes sigIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sigForever {
+  margin-top: 10px;
+  font-size: 22px;
+  font-weight: 1100;
+  color: rgba(45, 18, 40, 0.88);
+}
+.sigForever.sub {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* Celebration */
+.celebrateWrap {
+  width: min(1000px, 92vw);
+  height: min(70vh, 560px);
+  border-radius: 28px;
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(14px);
+  outline: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 50px 160px rgba(0,0,0,0.16);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.celebrateText {
+  z-index: 5;
+  text-align: center;
+  font-size: clamp(18px, 2.6vw, 34px);
+  font-weight: 1100;
+  color: rgba(45, 18, 40, 0.9);
+  text-shadow: 0 18px 60px rgba(255,255,255,0.28);
+}
+
+/* Confetti */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.conf {
+  position: absolute;
+  top: -20px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.85);
+  animation: confFall linear infinite;
+  transform: rotate(0deg);
+  opacity: 0.9;
+}
+
+@keyframes confFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(85vh) rotate(var(--spin)); opacity: 0.95; }
+}
+
+/* Replay bottom corner (very down, one corner) */
+.replayCorner {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  border: none;
+  border-radius: 16px;
+  padding: 12px 14px;
+  font-weight: 1000;
+  cursor: pointer;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.18);
+  z-index: 6;
+}
+/* =========================
+   LETTER TEXT ENHANCEMENTS
+   ========================= */
+
+/* Highlight opening lines */
+.letterHighlight {
+  font-size: 18px;
+  font-weight: 1000;
+  color: rgba(170, 70, 130, 0.95);
+  text-shadow: 0 8px 30px rgba(255, 160, 205, 0.35);
+}
+
+/* Soft contrast poetic lines */
+.letterContrast {
+  font-style: italic;
+  font-weight: 800;
+  color: rgba(80, 40, 90, 0.82);
+  padding-left: 6px;
+  border-left: 3px solid rgba(255, 170, 205, 0.55);
+  margin-left: 2px;
+}
+
+/* Valentine question — CENTER + LOWER */
+.letterQuestion {
+  margin: 26px auto 18px;
+  text-align: center;
+  font-size: clamp(22px, 3.4vw, 32px);
+  font-weight: 1100;
+  color: rgba(190, 60, 120, 0.95);
+  text-shadow:
+    0 10px 40px rgba(255, 120, 180, 0.45),
+    0 0 18px rgba(255, 190, 220, 0.55);
+  animation: softPulse 2.6s ease-in-out infinite;
+}
+
+@keyframes softPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* Signature polish */
+.sigName {
+  font-family: "cursive";
+  font-size: 36px;
+  font-weight: 1000;
+  color: rgba(45, 18, 40, 0.9);
+  text-shadow: 0 8px 28px rgba(255, 180, 210, 0.35);
+}
+
+/* Akhil signature typing glow */
+.akhilSig {
+  color: rgba(120, 40, 80, 0.92);
+  text-shadow:
+    0 6px 24px rgba(255, 150, 190, 0.45),
+    0 0 12px rgba(255, 200, 220, 0.45);
+}
+
+/* Forever line emphasis */
+.sigForever {
+  margin-top: 14px;
+  font-size: 24px;
+  font-weight: 1100;
+  color: rgba(160, 50, 100, 0.95);
+  text-shadow: 0 10px 40px rgba(255, 160, 205, 0.45);
+}
+
+.sigForever.sub {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* =========================
+   PROPOSE SCREEN EMPHASIS
+   ========================= */
+
+.proposeTitle {
+  margin-bottom: 12px;
+  text-shadow:
+    0 14px 50px rgba(255, 160, 205, 0.45),
+    0 0 18px rgba(255, 210, 230, 0.6);
+}
+
+/* YES button glow */
+.pBtn.primary {
+  box-shadow:
+    0 20px 60px rgba(255, 120, 180, 0.45),
+    0 0 18px rgba(255, 200, 220, 0.6);
+}
+
+/* =========================
+   CELEBRATION TEXT POLISH
+   ========================= */
+
+.celebrateText {
+  line-height: 1.35;
+  letter-spacing: 0.3px;
+}
