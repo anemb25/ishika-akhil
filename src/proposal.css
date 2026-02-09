@@ -1,3 +1,5 @@
+/* src/proposal.css */
+
 /* Full-page locked dreamy background */
 .proposalRoot {
   min-height: 100vh;
@@ -86,6 +88,9 @@
 
 .pBtn.primary {
   background: rgba(255, 160, 205, 0.90);
+  box-shadow:
+    0 20px 60px rgba(255, 120, 180, 0.45),
+    0 0 18px rgba(255, 200, 220, 0.6);
 }
 
 /* Transition screen */
@@ -104,11 +109,6 @@
   color: rgba(40, 18, 40, 0.86);
   text-shadow: 0 18px 50px rgba(255,255,255,0.35);
 }
-
-.fadeIn1 { opacity: 0; animation: fadeIn 700ms ease forwards; }
-.fadeIn2 { opacity: 0; animation: fadeIn 700ms ease forwards; animation-delay: 380ms; }
-.fadeIn3 { opacity: 0; animation: fadeIn 700ms ease forwards; animation-delay: 760ms; }
-@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
 
 /* Letter screen */
 .letterWrap {
@@ -144,20 +144,43 @@
   line-height: 1.55;
 }
 
-.letterBody p {
-  margin: 0 0 10px;
-}
-
-.letterEnd {
-  margin-top: 12px;
-  font-weight: 1000;
-}
-
+.letterBody p { margin: 0 0 10px; }
 .letterSign {
   margin-top: 18px;
   text-align: right;
   font-weight: 1000;
   opacity: 0.9;
+}
+
+/* Letter text enhancements */
+.letterHighlight {
+  font-size: 18px;
+  font-weight: 1000;
+  color: rgba(170, 70, 130, 0.95);
+  text-shadow: 0 8px 30px rgba(255, 160, 205, 0.35);
+}
+.letterContrast {
+  font-style: italic;
+  font-weight: 800;
+  color: rgba(80, 40, 90, 0.82);
+  padding-left: 6px;
+  border-left: 3px solid rgba(255, 170, 205, 0.55);
+  margin-left: 2px;
+}
+.letterQuestion {
+  margin: 26px auto 18px;
+  text-align: center;
+  font-size: clamp(22px, 3.4vw, 32px);
+  font-weight: 1100;
+  color: rgba(190, 60, 120, 0.95);
+  text-shadow:
+    0 10px 40px rgba(255, 120, 180, 0.45),
+    0 0 18px rgba(255, 190, 220, 0.55);
+  animation: softPulse 2.6s ease-in-out infinite;
+}
+@keyframes softPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
 }
 
 /* Propose screen */
@@ -174,6 +197,10 @@
   font-size: clamp(26px, 3.8vw, 44px);
   font-weight: 1100;
   color: rgba(40, 18, 40, 0.88);
+  margin-bottom: 12px;
+  text-shadow:
+    0 14px 50px rgba(255, 160, 205, 0.45),
+    0 0 18px rgba(255, 210, 230, 0.6);
 }
 
 .proposeBtns {
@@ -194,10 +221,28 @@
   font-size: 18px;
 }
 
-.tinyHint {
-  font-weight: 850;
-  opacity: 0.75;
-  color: rgba(45, 18, 40, 0.74);
+/* NO meme GIF layer */
+.noMemeLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.noMeme {
+  position: absolute;
+  width: 170px;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 22px 70px rgba(0,0,0,0.22);
+  outline: 1px solid rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(8px);
+  animation: memePop 220ms ease-out;
+  opacity: 0.95;
+}
+@keyframes memePop {
+  from { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+  to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
 /* Terms */
@@ -209,20 +254,11 @@
   text-align: center;
   padding: 18px;
 }
-
 .termsTitle {
   font-size: 22px;
   font-weight: 1000;
   color: rgba(45, 18, 40, 0.88);
 }
-
-.termsSub {
-  font-size: 14px;
-  font-weight: 900;
-  opacity: 0.8;
-  color: rgba(45, 18, 40, 0.78);
-}
-
 .termsCard {
   width: 100%;
   border-radius: 26px;
@@ -233,7 +269,6 @@
   box-shadow: 0 40px 120px rgba(0,0,0,0.14);
   text-align: left;
 }
-
 .termItem {
   padding: 10px 12px;
   border-radius: 16px;
@@ -252,13 +287,11 @@
   text-align: center;
   padding: 18px;
 }
-
 .signTitle {
   font-size: 24px;
   font-weight: 1100;
   color: rgba(45, 18, 40, 0.88);
 }
-
 .signInput {
   width: min(420px, 92vw);
   border: none;
@@ -269,13 +302,11 @@
   outline: 1px solid rgba(255,255,255,0.7);
   background: rgba(255,255,255,0.78);
 }
-
 .signReveal {
   margin-top: 8px;
   font-weight: 1000;
   color: rgba(45, 18, 40, 0.86);
 }
-
 .sigRow {
   display: flex;
   gap: 18px;
@@ -283,59 +314,93 @@
   justify-content: center;
   margin-top: 10px;
 }
-
 .sigName {
   font-family: "cursive";
-  font-size: 34px;
-  font-weight: 900;
-  color: rgba(45, 18, 40, 0.88);
+  font-size: 36px;
+  font-weight: 1000;
+  color: rgba(45, 18, 40, 0.9);
+  text-shadow: 0 8px 28px rgba(255, 180, 210, 0.35);
 }
-
 .akhilSig {
   opacity: 0;
   transform: translateY(8px);
   animation: sigIn 900ms ease forwards;
   animation-delay: 250ms;
+  color: rgba(120, 40, 80, 0.92);
+  text-shadow:
+    0 6px 24px rgba(255, 150, 190, 0.45),
+    0 0 12px rgba(255, 200, 220, 0.45);
 }
-
-@keyframes sigIn {
-  to { opacity: 1; transform: translateY(0); }
-}
-
+@keyframes sigIn { to { opacity: 1; transform: translateY(0); } }
 .sigForever {
-  margin-top: 10px;
-  font-size: 22px;
+  margin-top: 14px;
+  font-size: 24px;
   font-weight: 1100;
-  color: rgba(45, 18, 40, 0.88);
+  color: rgba(160, 50, 100, 0.95);
+  text-shadow: 0 10px 40px rgba(255, 160, 205, 0.45);
 }
-.sigForever.sub {
-  font-size: 14px;
-  opacity: 0.85;
-}
+.sigForever.sub { font-size: 14px; opacity: 0.8; }
 
-/* Celebration */
-.celebrateWrap {
-  width: min(1000px, 92vw);
-  height: min(70vh, 560px);
-  border-radius: 28px;
+/* Meme screens */
+.memeStage {
+  width: min(980px, 92vw);
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  text-align: center;
+  padding: 18px;
+}
+.memeTitle {
+  font-size: clamp(20px, 3vw, 34px);
+  font-weight: 1100;
+  color: rgba(45, 18, 40, 0.9);
+  text-shadow: 0 14px 50px rgba(255, 160, 205, 0.35);
+}
+.memeHint {
+  font-weight: 900;
+  opacity: 0.82;
+  color: rgba(45, 18, 40, 0.78);
+}
+.memeMediaCard {
+  width: min(900px, 92vw);
+  border-radius: 26px;
   background: rgba(255,255,255,0.22);
   backdrop-filter: blur(14px);
   outline: 1px solid rgba(255,255,255,0.5);
   box-shadow: 0 50px 160px rgba(0,0,0,0.16);
-  position: relative;
   overflow: hidden;
-  display: grid;
-  place-items: center;
-  padding: 18px;
 }
 
-.celebrateText {
-  z-index: 5;
-  text-align: center;
-  font-size: clamp(18px, 2.6vw, 34px);
-  font-weight: 1100;
-  color: rgba(45, 18, 40, 0.9);
-  text-shadow: 0 18px 60px rgba(255,255,255,0.28);
+/* Video style (not player) */
+.memeVideo {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+.memeVideo::-webkit-media-controls { display: none !important; }
+.memeVideo::-webkit-media-controls-enclosure { display: none !important; }
+
+/* Celebration */
+.celebrateWrap{
+  width: min(1100px, 94vw);
+  min-height: 75vh;
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* centers the TEXT block */
+
+  gap: 22px;
+  padding: 26px 22px 32px;
+
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(14px);
+  border-radius: 28px;
+  outline: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 50px 160px rgba(0,0,0,0.16);
 }
 
 /* Confetti */
@@ -345,24 +410,96 @@
   pointer-events: none;
   z-index: 2;
 }
-
 .conf {
   position: absolute;
   top: -20px;
   border-radius: 6px;
   background: rgba(255,255,255,0.85);
   animation: confFall linear infinite;
-  transform: rotate(0deg);
   opacity: 0.9;
 }
-
 @keyframes confFall {
   0% { transform: translateY(0) rotate(0deg); opacity: 0; }
   10% { opacity: 1; }
   100% { transform: translateY(85vh) rotate(var(--spin)); opacity: 0.95; }
 }
 
-/* Replay bottom corner (very down, one corner) */
+/* NEW: inner layout so text + video are aligned cleanly */
+.celebrateInner {
+  position: relative;
+  z-index: 5;
+  width: min(980px, 92vw);
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  text-align: center;
+  padding: 10px 8px;
+}
+
+.celebrateText{
+  z-index: 6;
+  text-align: center;
+  font-size: clamp(18px, 2.4vw, 34px);
+  font-weight: 1100;
+  color: rgba(45, 18, 40, 0.9);
+  text-shadow: 0 18px 60px rgba(255,255,255,0.28);
+  max-width: 900px;
+}
+
+/* Smaller chipi video card */
+.finalVideoCard{
+  margin-top: auto;        /* 👈 pushes it down */
+  margin-bottom: 8px;
+
+  width: 300px;            /* ~2x GIF size */
+  max-width: 320px;
+
+  z-index: 5;
+  border-radius: 20px;
+  overflow: hidden;
+
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(10px);
+  outline: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 22px 70px rgba(0,0,0,0.16);
+}
+
+.memeVideo.final {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Final dancing gifs placed around */
+.finalGifs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.finalGif {
+  position: absolute;
+  width: 140px;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 22px 70px rgba(0,0,0,0.18);
+  outline: 1px solid rgba(255,255,255,0.55);
+  opacity: 0.92;
+  transform: rotate(-3deg);
+  animation: floatWobble 2.8s ease-in-out infinite;
+}
+@keyframes floatWobble {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-10px) rotate(3deg); }
+}
+.finalGif.pos1 { left: 18px; top: 18px; }
+.finalGif.pos2 { right: 18px; top: 22px; }
+.finalGif.pos3 { left: 22px; bottom: 74px; }
+.finalGif.pos4 { right: 22px; bottom: 78px; }
+.finalGif.pos5 { left: 50%; top: 10px; transform: translateX(-50%) rotate(2deg); }
+
+/* Replay bottom corner */
 .replayCorner {
   position: absolute;
   right: 16px;
@@ -376,100 +513,93 @@
   box-shadow: 0 18px 50px rgba(0,0,0,0.18);
   z-index: 6;
 }
-/* =========================
-   LETTER TEXT ENHANCEMENTS
-   ========================= */
-
-/* Highlight opening lines */
-.letterHighlight {
-  font-size: 18px;
-  font-weight: 1000;
-  color: rgba(170, 70, 130, 0.95);
-  text-shadow: 0 8px 30px rgba(255, 160, 205, 0.35);
+.celebrateCenter{
+  z-index: 6;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
-/* Soft contrast poetic lines */
-.letterContrast {
-  font-style: italic;
-  font-weight: 800;
-  color: rgba(80, 40, 90, 0.82);
-  padding-left: 6px;
-  border-left: 3px solid rgba(255, 170, 205, 0.55);
-  margin-left: 2px;
-}
+.celebrateText{
+  max-width: 780px;
+  padding: 18px 22px;
+  border-radius: 20px;
 
-/* Valentine question — CENTER + LOWER */
-.letterQuestion {
-  margin: 26px auto 18px;
   text-align: center;
-  font-size: clamp(22px, 3.4vw, 32px);
+  font-size: clamp(18px, 2.4vw, 32px);
   font-weight: 1100;
-  color: rgba(190, 60, 120, 0.95);
-  text-shadow:
-    0 10px 40px rgba(255, 120, 180, 0.45),
-    0 0 18px rgba(255, 190, 220, 0.55);
-  animation: softPulse 2.6s ease-in-out infinite;
-}
-
-@keyframes softPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-}
-
-/* Signature polish */
-.sigName {
-  font-family: "cursive";
-  font-size: 36px;
-  font-weight: 1000;
-  color: rgba(45, 18, 40, 0.9);
-  text-shadow: 0 8px 28px rgba(255, 180, 210, 0.35);
-}
-
-/* Akhil signature typing glow */
-.akhilSig {
-  color: rgba(120, 40, 80, 0.92);
-  text-shadow:
-    0 6px 24px rgba(255, 150, 190, 0.45),
-    0 0 12px rgba(255, 200, 220, 0.45);
-}
-
-/* Forever line emphasis */
-.sigForever {
-  margin-top: 14px;
-  font-size: 24px;
-  font-weight: 1100;
-  color: rgba(160, 50, 100, 0.95);
-  text-shadow: 0 10px 40px rgba(255, 160, 205, 0.45);
-}
-
-.sigForever.sub {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-/* =========================
-   PROPOSE SCREEN EMPHASIS
-   ========================= */
-
-.proposeTitle {
-  margin-bottom: 12px;
-  text-shadow:
-    0 14px 50px rgba(255, 160, 205, 0.45),
-    0 0 18px rgba(255, 210, 230, 0.6);
-}
-
-/* YES button glow */
-.pBtn.primary {
-  box-shadow:
-    0 20px 60px rgba(255, 120, 180, 0.45),
-    0 0 18px rgba(255, 200, 220, 0.6);
-}
-
-/* =========================
-   CELEBRATION TEXT POLISH
-   ========================= */
-
-.celebrateText {
   line-height: 1.35;
-  letter-spacing: 0.3px;
+
+  color: rgba(45, 18, 40, 0.92);
+
+  background: rgba(255,255,255,0.55); /* 👈 text shield */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.14);
+
+  text-shadow: none;
+}
+
+/* ===== FINAL PAGE LAYOUT (MATCH REFERENCE) ===== */
+.celebrateFinal {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Keep GIFs + confetti behind everything */
+.finalGifs { z-index: 3; }
+.confetti { z-index: 2; }
+
+/* ✅ Center block EXACTLY in the container */
+.centerTextWrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9;
+  width: min(760px, 86%);
+  display: grid;
+  place-items: center;
+}
+
+.centerTextCard {
+  width: 100%;
+  text-align: center;
+  padding: 16px 18px;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(12px);
+  outline: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 18px 55px rgba(0,0,0,0.14);
+
+  font-size: clamp(18px, 2.2vw, 28px);
+  font-weight: 1100;
+  line-height: 1.35;
+  color: rgba(45, 18, 40, 0.92);
+}
+
+/* ✅ Chipi chipi pinned to bottom, almost touching border */
+.chipiDock {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;               /* 👈 almost touching */
+  transform: translateX(-50%);
+  z-index: 8;
+
+  width: 360px;               /* approx 2x gif size */
+  height: 220px;
+  border-radius: 18px;
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(12px);
+  outline: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 22px 70px rgba(0,0,0,0.16);
+}
+
+.chipiVideo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;          /* keeps it looking “full” like reference */
 }

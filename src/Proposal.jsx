@@ -1,7 +1,39 @@
+// src/Proposal.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+
+/* ======================
+   🔥 ASSETS (PUT THESE IN /public/)
+====================== */
+const ASSETS = {
+  // 6–7 crying cat memes (GIF) for NO spam (cycle/random)
+  noGifs: [
+    "/memes/no/no1.gif",
+    "/memes/no/no2.gif",
+    "/memes/no/no3.gif",
+    "/memes/no/no4.gif",
+    "/memes/no/no5.gif",
+    "/memes/no/no6.gif",
+    "/memes/no/no7.gif",
+  ],
+
+  // After YES: 8 sec dance celebration (MP4 with sound)
+  yesDanceVideo: "/videos/yes_dance.mp4",
+
+  // Final: chipi chipi cat (MP4 with sound, play once)
+  chipiVideo: "/videos/chipi-chipi.mp4",
+
+  // Final: multiple cats dancing (GIFs)
+  finalDanceGifs: [
+    "/memes/dance/cat1.gif",
+    "/memes/dance/cat2.gif",
+    "/memes/dance/cat3.gif",
+    "/memes/dance/cat4.gif",
+    "/memes/dance/cat5.gif",
+  ],
+};
 
 /* ======================
    SIMPLE SFX
@@ -54,6 +86,7 @@ const STEPS = {
   TRANSITION: "transition",
   LETTER: "letter",
   PROPOSE: "propose",
+  YES_CELEB: "yes_celeb", // after YES
   TERMS: "terms",
   SIGN: "sign",
   CELEBRATE: "celebrate",
@@ -87,6 +120,10 @@ export default function Proposal() {
     ],
     []
   );
+
+  // NO MEMES: keep last 7 gifs on screen
+  const [noMemes, setNoMemes] = useState([]); // [{id, src, left, top, rot, scale}]
+  const noMemeId = useRef(1);
 
   /* ======================
      LETTER CONTENT
@@ -172,11 +209,28 @@ export default function Proposal() {
   ====================== */
   const onClickNo = () => {
     sfx.no();
+
     setNoPos({
       x: clamp(12 + Math.random() * 76, 10, 88),
       y: clamp(18 + Math.random() * 62, 18, 86),
     });
+
     showToast(funnyNoLines[Math.floor(Math.random() * funnyNoLines.length)]);
+
+    const src = ASSETS.noGifs[Math.floor(Math.random() * ASSETS.noGifs.length)];
+    const meme = {
+      id: noMemeId.current++,
+      src,
+      left: clamp(6 + Math.random() * 88, 6, 94),
+      top: clamp(12 + Math.random() * 70, 12, 86),
+      rot: (Math.random() * 18 - 9).toFixed(2),
+      scale: (0.85 + Math.random() * 0.35).toFixed(2),
+    };
+
+    setNoMemes((prev) => {
+      const next = [...prev, meme];
+      return next.length > 7 ? next.slice(next.length - 7) : next;
+    });
   };
 
   /* ======================
@@ -204,6 +258,26 @@ export default function Proposal() {
       if (i === full.length) clearInterval(id);
     }, 220);
   };
+
+  /* ======================
+     VIDEO PLAY (sound + no controls)
+====================== */
+  const yesVidRef = useRef(null);
+  const chipiRef = useRef(null);
+
+  const tryPlay = async (ref) => {
+    try {
+      if (!ref?.current) return;
+      ref.current.currentTime = 0;
+      await ref.current.play();
+    } catch {}
+  };
+
+  useEffect(() => {
+    if (step === STEPS.YES_CELEB) tryPlay(yesVidRef);
+    if (step === STEPS.CELEBRATE) tryPlay(chipiRef);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
 
   /* ======================
      RENDER
@@ -254,20 +328,14 @@ export default function Proposal() {
                   <p
                     key={i}
                     className={
-                      i < 2
-                        ? "letterHighlight"
-                        : i === 2 || i === 3
-                        ? "letterContrast"
-                        : ""
+                      i < 2 ? "letterHighlight" : i === 2 || i === 3 ? "letterContrast" : ""
                     }
                   >
                     {l}
                   </p>
                 ))}
 
-                <div className="letterQuestion">
-                  Will you be my forever Valentine? ❤️
-                </div>
+                <div className="letterQuestion">Will you be my forever Valentine? ❤️</div>
 
                 <div className="letterSign">— Akhil</div>
               </div>
@@ -281,16 +349,31 @@ export default function Proposal() {
 
         {step === STEPS.PROPOSE && (
           <div className="proposeWrap">
-            <div className="proposeTitle">
-              Will you be my forever Valentine?
-            </div>
+            <div className="proposeTitle">Will you be my forever Valentine?</div>
 
             <div className="proposeBtns">
+              <div className="noMemeLayer" aria-hidden="true">
+                {noMemes.map((m) => (
+                  <img
+                    key={m.id}
+                    className="noMeme"
+                    src={m.src}
+                    alt=""
+                    style={{
+                      left: `${m.left}%`,
+                      top: `${m.top}%`,
+                      transform: `translate(-50%, -50%) rotate(${m.rot}deg) scale(${m.scale})`,
+                    }}
+                  />
+                ))}
+              </div>
+
               <button
                 className="pBtn primary"
                 onClick={() => {
                   sfx.yes();
-                  setStep(STEPS.TERMS);
+                  setNoMemes([]);
+                  setStep(STEPS.YES_CELEB);
                 }}
               >
                 YES
@@ -298,11 +381,7 @@ export default function Proposal() {
 
               <button
                 className="pBtn"
-                style={{
-                  position: "absolute",
-                  left: `${noPos.x}%`,
-                  top: `${noPos.y}%`,
-                }}
+                style={{ position: "absolute", left: `${noPos.x}%`, top: `${noPos.y}%` }}
                 onClick={onClickNo}
               >
                 NO
@@ -311,11 +390,40 @@ export default function Proposal() {
           </div>
         )}
 
+        {step === STEPS.YES_CELEB && (
+          <div className="memeStage">
+            <div className="memeTitle">Hehe… good choice 😌❤️</div>
+
+            <div className="memeMediaCard">
+              <video
+                ref={yesVidRef}
+                className="memeVideo"
+                src={ASSETS.yesDanceVideo}
+                playsInline
+                autoPlay
+                controls={false}
+                onLoadedData={() => tryPlay(yesVidRef)}
+              />
+            </div>
+
+            <div className="memeHint">Okay now… officially 🥰</div>
+
+            <button
+              className="pBtn primary"
+              onClick={() => {
+                sfx.tap();
+                tryPlay(yesVidRef);
+                setStep(STEPS.TERMS);
+              }}
+            >
+              Continue
+            </button>
+          </div>
+        )}
+
         {step === STEPS.TERMS && (
           <div className="termsWrap">
-            <div className="termsTitle">
-              That’s great 😌 You’ve taken the best decision
-            </div>
+            <div className="termsTitle">That’s great, Now sign the Terms and Promises Agreement</div>
             <div className="termsCard">
               {terms.map((t, i) => (
                 <div key={i} className="termItem">
@@ -324,7 +432,7 @@ export default function Proposal() {
               ))}
             </div>
             <button className="pBtn primary" onClick={() => setStep(STEPS.SIGN)}>
-              Sign
+              Sign✍🏻
             </button>
           </div>
         )}
@@ -346,9 +454,7 @@ export default function Proposal() {
               </>
             ) : (
               <>
-                <div className="signReveal">
-                  Wait… what made you think you’re alone in this?
-                </div>
+                <div className="signReveal">Wait… what made you think you’re alone in this?</div>
 
                 <div className="sigRow">
                   <div className="sigName userSig">{name}</div>
@@ -365,7 +471,7 @@ export default function Proposal() {
                     setStep(STEPS.CELEBRATE);
                   }}
                 >
-                  Celebrate
+                  Continue
                 </button>
               </>
             )}
@@ -391,11 +497,32 @@ export default function Proposal() {
               ))}
             </div>
 
-            <div className="celebrateText">
-              Contract Signed. Yahoooooooo! 🎉
-              <br />
-              Ishika is Akhil’s girl and Akhil is Ishika’s guy — let’s celebrate
-              love!
+            <div className="finalGifs" aria-hidden="true">
+              {ASSETS.finalDanceGifs.map((src, i) => (
+                <img key={i} className={`finalGif pos${i + 1}`} src={src} alt="" />
+              ))}
+            </div>
+
+            {/* Bigger overall layout, smaller video */}
+            <div className="celebrateInner">
+              <div className="celebrateText">
+                Contract Signed. Yahoooooooo! 🎉
+                <br />
+                Ishika is Akhil’s girl and Akhil is Ishika’s guy — let’s celebrate love!
+              </div>
+
+              <div className="finalVideoCard">
+                <video
+                  ref={chipiRef}
+                  className="memeVideo final"
+                  src={ASSETS.chipiVideo}
+                  playsInline
+                  autoPlay
+                  controls={false}
+                  loop={false}
+                  onLoadedData={() => tryPlay(chipiRef)}
+                />
+              </div>
             </div>
 
             <button className="replayCorner" onClick={() => nav("/")}>
