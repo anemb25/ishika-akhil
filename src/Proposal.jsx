@@ -312,7 +312,10 @@ export default function Proposal() {
             <div className="bigLine">The game is over…</div>
             <div className="bigLine">But what we played was real.</div>
             <div className="bigLine">Now… let me talk to you.</div>
-            <button className="pBtn primary" onClick={() => setStep(STEPS.LETTER)}>
+            <button
+              className="pBtn primary"
+              onClick={() => setStep(STEPS.LETTER)}
+            >
               Continue
             </button>
           </div>
@@ -328,20 +331,29 @@ export default function Proposal() {
                   <p
                     key={i}
                     className={
-                      i < 2 ? "letterHighlight" : i === 2 || i === 3 ? "letterContrast" : ""
+                      i < 2
+                        ? "letterHighlight"
+                        : i === 2 || i === 3
+                        ? "letterContrast"
+                        : ""
                     }
                   >
                     {l}
                   </p>
                 ))}
 
-                <div className="letterQuestion">Will you be my forever Valentine? ❤️</div>
+                <div className="letterQuestion">
+                  Will you be my forever Valentine? ❤️
+                </div>
 
                 <div className="letterSign">— Akhil</div>
               </div>
             </div>
 
-            <button className="pBtn primary" onClick={() => setStep(STEPS.PROPOSE)}>
+            <button
+              className="pBtn primary"
+              onClick={() => setStep(STEPS.PROPOSE)}
+            >
               Next
             </button>
           </div>
@@ -349,7 +361,9 @@ export default function Proposal() {
 
         {step === STEPS.PROPOSE && (
           <div className="proposeWrap">
-            <div className="proposeTitle">Will you be my forever Valentine?</div>
+            <div className="proposeTitle">
+              Will you be my forever Valentine?
+            </div>
 
             <div className="proposeBtns">
               <div className="noMemeLayer" aria-hidden="true">
@@ -381,7 +395,11 @@ export default function Proposal() {
 
               <button
                 className="pBtn"
-                style={{ position: "absolute", left: `${noPos.x}%`, top: `${noPos.y}%` }}
+                style={{
+                  position: "absolute",
+                  left: `${noPos.x}%`,
+                  top: `${noPos.y}%`,
+                }}
                 onClick={onClickNo}
               >
                 NO
@@ -423,7 +441,9 @@ export default function Proposal() {
 
         {step === STEPS.TERMS && (
           <div className="termsWrap">
-            <div className="termsTitle">That’s great, Now sign the Terms and Promises Agreement</div>
+            <div className="termsTitle">
+              That’s great, Now sign the Terms and Promises Agreement
+            </div>
             <div className="termsCard">
               {terms.map((t, i) => (
                 <div key={i} className="termItem">
@@ -431,7 +451,10 @@ export default function Proposal() {
                 </div>
               ))}
             </div>
-            <button className="pBtn primary" onClick={() => setStep(STEPS.SIGN)}>
+            <button
+              className="pBtn primary"
+              onClick={() => setStep(STEPS.SIGN)}
+            >
               Sign✍🏻
             </button>
           </div>
@@ -454,7 +477,9 @@ export default function Proposal() {
               </>
             ) : (
               <>
-                <div className="signReveal">Wait… what made you think you’re alone in this?</div>
+                <div className="signReveal">
+                  Wait… what made you think you’re alone in this?
+                </div>
 
                 <div className="sigRow">
                   <div className="sigName userSig">{name}</div>
@@ -499,7 +524,12 @@ export default function Proposal() {
 
             <div className="finalGifs" aria-hidden="true">
               {ASSETS.finalDanceGifs.map((src, i) => (
-                <img key={i} className={`finalGif pos${i + 1}`} src={src} alt="" />
+                <img
+                  key={i}
+                  className={`finalGif pos${i + 1}`}
+                  src={src}
+                  alt=""
+                />
               ))}
             </div>
 
@@ -508,7 +538,8 @@ export default function Proposal() {
               <div className="celebrateText">
                 Contract Signed. Yahoooooooo! 🎉
                 <br />
-                Ishika is Akhil’s girl and Akhil is Ishika’s guy — let’s celebrate love!
+                Ishika is Akhil’s girl and Akhil is Ishika’s guy — let’s celebrate
+                love!
               </div>
 
               <div className="finalVideoCard">
@@ -518,6 +549,8 @@ export default function Proposal() {
                   src={ASSETS.chipiVideo}
                   playsInline
                   autoPlay
+                  muted={false}
+                  preload="auto"
                   controls={false}
                   loop={false}
                   onLoadedData={() => tryPlay(chipiRef)}
